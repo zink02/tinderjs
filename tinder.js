@@ -29,12 +29,13 @@ function TinderClient() {
     };
     
     var headers = {
-        'User-Agent' : 'Tinder Android Version 2.2.3',
-        'os_version' : '16'
+        'User-Agent' : 'Tinder/4.8.1 (iPhone; iOS 9.2.1; Scale/2.00)',
+		'Content-Type' : 'application/json'		
     };
   
     if (xAuthToken) {
         headers['X-Auth-Token'] = xAuthToken;
+		headers['Authorization'] = 'Token token="' + xAuthToken + '"';
     }
     
     options.headers = headers;
@@ -159,12 +160,19 @@ function TinderClient() {
       function(error, res, body) {
         if (!error && body.token) {
           xAuthToken = body.token;
+		  console.log("body token: " + xAuthToken);
           _this.userId = body.user._id;
           _this.defaults = body;
-          callback(error, res, body);
-        } else if (body.error){
-          throw "Failed to authenticate: " + body.error
+		  callback(null);
+        //} else if (body.error){
+		
+		} else {
+			callback("not logged in");
+          //throw "Failed to authenticate: " + body.error
         }
+		
+          //callback(error, res, body);
+		
       });
   };
   
@@ -176,13 +184,6 @@ function TinderClient() {
     return xAuthToken != null;
   }
   
-  /**
-   * Returns the xAuthToken
-   * @return xAuthToken
-   */
-  this.getAuthToken = function() {
-    return xAuthToken || null;
-  }
   
   /**
    * Returns client information and globals
