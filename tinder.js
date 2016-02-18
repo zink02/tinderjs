@@ -197,10 +197,10 @@ function TinderClient() {
    * Gets a list of new updates. This will be things like new messages, people who liked you, etc. 
    * @param {Function} callback the callback to invoke when the request completes
    */
-  this.getUpdates = function(callback) {
+  this.getUpdates = function(mylastactivity, callback) {
     tinderPost('updates',
       {
-        last_activity_date: lastActivity.toISOString() 
+        last_activity_date: mylastactivity.toISOString() 
       },
       makeTinderCallback(function(err, data){
         lastActivity = new Date(data.last_activity_date);
